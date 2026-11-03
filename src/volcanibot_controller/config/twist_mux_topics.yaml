@@ -1,0 +1,12 @@
+twist_mux:
+  ros__parameters:
+    use_stamped: true
+    topics:
+      joystick:
+        topic   : joy_vel
+        timeout : 0.5
+        priority: 99
+      keyboard: 
+        topic   : key_vel #ros2 run key_teleop key_teleop --ros-args -p twist_stamped_enabled:=False
+        timeout : 0.5
+        priority: 90

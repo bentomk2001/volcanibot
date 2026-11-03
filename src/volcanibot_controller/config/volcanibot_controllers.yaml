@@ -1,0 +1,67 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100 # Hz
+    use_sim_time: true
+    # enforce_command_limits: true  <--- Add this line when we want to enforce hardware limit on wheel speed
+
+    volcanibot_controller:
+      type: diff_drive_controller/DiffDriveController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+
+volcanibot_controller:
+  ros__parameters:
+    type        : diff_drive_controller/DiffDriveController
+    use_stamped_vel: true
+    left_wheel_names  : ['wheel_left_fwd_joint', 'wheel_left_bwd_joint']
+    right_wheel_names : ['wheel_right_fwd_joint', 'wheel_right_bwd_joint']
+
+    publish_rate: 50.0               # default: 50
+    pose_covariance_diagonal : [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.01] #[X, Y, Z, Roll, Pitch, Yaw] the lower the number the more confident u are in the odometry
+    twist_covariance_diagonal: [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.01] # confidence in yaw lowest (ekf will tell imu to handle this more accurately instaed)
+
+    wheel_separation : 0.51842
+    wheel_radius : 0.141
+
+    wheel_separation_multiplier: 1.0 #cause of wheel slippage might turn less in real world, so change to 1.1-1.2 ish
+    left_wheel_radius_multiplier: 1.0 # cause of wheel squish might need to change in real world to 0.98 ish
+    right_wheel_radius_multiplier: 1.0 # cause of wheel squish might need to change in real world to 0.98 ish
+
+    # Velocity commands timeout [s], default 0.5
+    cmd_vel_timeout: 0.5
+
+    # Base frame_id
+    base_frame_id: base_footprint #default: base_link
+
+    # Publish limited velocity
+    publish_limited_velocity: true
+
+    # Publish wheel data
+    publish_wheel_data: true
+
+    # Publish to TF directly or not
+    enable_odom_tf: true
+
+    # Velocity and acceleration limits (chasis behaviour software level. the hardware limit is defined in ros2_control.xacro)
+    # Whenever a min_* is unspecified, default to -max_*
+    linear:
+      x:
+        has_velocity_limits    : true
+        max_velocity           : 1.0  # m/s
+        min_velocity           : -0.5 # m/s
+        has_acceleration_limits: true
+        max_acceleration       : 0.8  # m/s^2
+        min_acceleration       : -0.4 # m/s^2
+        has_jerk_limits        : false
+        max_jerk               : 5.0  # m/s^3
+    angular:
+      z:
+        has_velocity_limits    : true
+        max_velocity           : 1.7  # rad/s
+        has_acceleration_limits: true
+        max_acceleration       : 1.5  # rad/s^2
+        has_jerk_limits        : false
+        max_jerk               : 2.5  # rad/s^3
+
