@@ -32,8 +32,13 @@ volcanibot_controller:
     # Velocity commands timeout [s], default 0.5
     cmd_vel_timeout: 0.5
 
-    # Base frame_id
-    base_frame_id: base_footprint #default: base_link
+    # Base and Odometry frames
+    odom_frame_id: odom           # default: odom
+    base_frame_id: base_footprint # default: base_link
+
+    # Odometry calculation from encoders
+    open_loop: false              # false = read encoder state interfaces; true = integrate cmd_vel only
+    position_feedback: true       # true = use wheel 'position' state interface; false = use 'velocity'
 
     # Publish limited velocity
     publish_limited_velocity: true
@@ -41,8 +46,8 @@ volcanibot_controller:
     # Publish wheel data
     publish_wheel_data: true
 
-    # Publish to TF directly or not
-    enable_odom_tf: true
+    # Publish odom -> base_footprint TF directly (set to false when using robot_localization EKF)
+    enable_odom_tf: false
 
     # Velocity and acceleration limits (chasis behaviour software level. the hardware limit is defined in ros2_control.xacro)
     # Whenever a min_* is unspecified, default to -max_*
@@ -64,4 +69,3 @@ volcanibot_controller:
         max_acceleration       : 1.5  # rad/s^2
         has_jerk_limits        : false
         max_jerk               : 2.5  # rad/s^3
-
