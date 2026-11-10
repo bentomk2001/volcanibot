@@ -12,11 +12,15 @@
 
 * Source environment: `source install/setup.bash`
 
+* Launch Full Simulated Robot (Bringup): `ros2 launch volcanibot_bringup simulated_robot.launch.py`
+
 * Launch Simulation: `ros2 launch volcanibot_description gazebo.launch.py use_sim_time:=true`
 
 * Launch Controllers: `ros2 launch volcanibot_controller controller.launch.py use_sim_time:=true`
 
 * Launch Localization (EKF): `ros2 launch volcanibot_localization local_localization.launch.py use_sim_time:=true`
+
+* Launch SLAM Mapping: `ros2 launch volcanibot_mapping slam.launch.py use_sim_time:=true`
 
 ## Workspace Package Map (`src/`)
 
@@ -25,6 +29,10 @@
 * `volcanibot_controller` (CMake): Core control logic and differential drive control, with nodes written in Python.
 
 * `volcanibot_localization` (CMake): Sensor fusion and state estimation using `robot_localization` (Extended Kalman Filter fusing wheel odometry and IMU) and Python IMU covariance preprocessing.
+
+* `volcanibot_mapping` (CMake): 2D LiDAR SLAM pipeline using `slam_toolbox`, `nav2_map_server` (`map_saver_server`), and `nav2_lifecycle_manager`, plus saved occupancy grid maps.
+
+* `volcanibot_bringup` (CMake): Top-level launch files (`simulated_robot.launch.py`) combining simulation, controllers, teleop, EKF localization, and SLAM/navigation.
 
 ## Coding Conventions & AI Prompting Rules
 

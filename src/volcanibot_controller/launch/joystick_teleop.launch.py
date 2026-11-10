@@ -32,29 +32,25 @@ def generate_launch_description():
                     {"use_sim_time": LaunchConfiguration("use_sim_time")}]
     )
     
-    twist_mux_launch = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("twist_mux"),
-            "launch",
-            "twist_mux_launch.py"
-        ),
-        launch_arguments={
-            "cmd_vel_out": "volcanibot_controller/cmd_vel",
-            "joy_vel_out": "joy_vel_unused",  # <--- Stops joystick_relay from colliding with /joy_vel
-            "config_locks": os.path.join(volcanibot_controller_pkg, "config", "twist_mux_locks.yaml"),
-            "config_topics": os.path.join(volcanibot_controller_pkg, "config", "twist_mux_topics.yaml"),
-            "config_joy": os.path.join(volcanibot_controller_pkg, "config", "twist_mux_joy.yaml"),
-            "use_sim_time": LaunchConfiguration("use_sim_time"),
-            "use_stamped": "true", #sometimes ros overrides use_Stamped that is defined in yaml file so just to be sure
-        }.items(),
+    twist_mux_node = Node(
+        package="twist_mux",
+        executable="twist_mux",
+        name="twist_mux",
+        output="screen",
+        remappings=[("/cmd_vel_out", "/volcanibot_controller/cmd_vel")],
+        parameters=[
+            os.path.join(volcanibot_controller_pkg, "config", "twist_mux_locks.yaml"),
+            os.path.join(volcanibot_controller_pkg, "config", "twist_mux_topics.yaml"),
+            {"use_sim_time": LaunchConfiguration("use_sim_time")},
+            {"use_stamped": True},
+        ],
     )
 
-    
     return LaunchDescription(
         [
             use_sim_time_arg,
             joy_teleop,
             joy_node,
-            twist_mux_launch,
+            twist_mux_node,
         ]
     )
